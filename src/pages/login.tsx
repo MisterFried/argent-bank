@@ -1,8 +1,18 @@
 import { FaUserCircle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "../state/user";
 
-export default function SignIn() {
+export default function Login() {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	function loginUser() {
+		dispatch(login());
+		navigate("/user");
+	}
 	return (
-		<main className="grow grid place-items-center bg-[#12002b]">
+		<main className="grow grid place-items-center bg-background">
 			<section className="flex flex-col items-center gap-4 p-8 bg-white">
 				<FaUserCircle />
 				<h1 className="text-2xl">Sign In</h1>
@@ -29,7 +39,11 @@ export default function SignIn() {
 						<input type="checkbox" name="rememberMe" id="rememberMe" />
 						<label htmlFor="rememberMe">Remember me</label>
 					</p>
-					<button className="w-full p-2 bg-[#00bc77] text-white text-xl font-semibold hover:underline">
+					<button
+						type="button"
+						onClick={loginUser}
+						className="w-full p-2 bg-primary-400 text-white text-xl font-semibold hover:underline hover:bg-primary-600 transition-all"
+					>
 						Sign In
 					</button>
 				</form>

@@ -1,27 +1,28 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home.tsx";
 import Header from "./components/header.tsx";
 import Footer from "./components/footer.tsx";
-import SignIn from "./pages/signIn.tsx";
+import Login from "./pages/login.tsx";
 import User from "./pages/user.tsx";
+import { store } from "./state/store.ts";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 function App() {
 	return (
-		<React.StrictMode>
+		<Provider store={store}>
 			<BrowserRouter>
 				<Header />
 				<Routes>
 					<Route path="/" element={<Home />} />
-					<Route path="/signin" element={<SignIn />} />
+					<Route path="/login" element={<Login />} />
 					<Route path="/user" element={<User />} />
 				</Routes>
 				<Footer />
 			</BrowserRouter>
-		</React.StrictMode>
+		</Provider>
 	);
 }
 

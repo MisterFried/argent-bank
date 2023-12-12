@@ -3,7 +3,7 @@ export default function Presentation() {
 		<section className="grid grid-rows-3 grid-cols-1 md:grid-rows-1 md:grid-cols-3 gap-12 p-12">
 			<article className="flex flex-col items-center gap-4">
 				<img
-					className="w-[150px] h-[150px] border-8 rounded-full border-primary"
+					className="w-[150px] h-[150px] border-8 rounded-full border-primary-400"
 					src="/images/icon-chat.png"
 					alt="Icone chat"
 				/>
@@ -15,7 +15,7 @@ export default function Presentation() {
 			</article>
 			<article className="flex flex-col items-center gap-4">
 				<img
-					className="w-[150px] h-[150px] border-8 rounded-full border-primary"
+					className="w-[150px] h-[150px] border-8 rounded-full border-primary-400"
 					src="/images/icon-money.png"
 					alt="Icone money"
 				/>
@@ -24,7 +24,7 @@ export default function Presentation() {
 			</article>
 			<article className="flex flex-col items-center gap-4">
 				<img
-					className="w-[150px] h-[150px] border-8 rounded-full border-primary"
+					className="w-[150px] h-[150px] border-8 rounded-full border-primary-400"
 					src="/images/icon-security.png"
 					alt="Icone security"
 				/>
