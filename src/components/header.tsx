@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../types/types";
 import { PiSignOutBold } from "react-icons/pi";
-import { logout } from "../state/user";
+import { deleteToken } from "../state/userToken";
 
 export default function Header() {
-	const navigate = useNavigate();
-	const user = useSelector((state: RootState) => state.user);
+	const tokenState = useSelector((state: RootState) => state.userToken);
+	const userInfo = useSelector((state: RootState) => state.userInfo);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	function logoutUser() {
-		dispatch(logout());
+		dispatch(deleteToken());
 		navigate("/");
 	}
 
@@ -23,13 +24,20 @@ export default function Header() {
 				src="images/argentBankLogo.png"
 				alt="Argent Bank Logo"
 			/>
-			{user.logged ? (
+			{tokenState.token === "" ? (
+				<button
+					onClick={() => navigate("/login")}
+					className="flex justify-items-center items-center gap-1 text-lg hover:underline"
+				>
+					<FaUserCircle /> Sign in
+				</button>
+			) : (
 				<div className="flex justify-items-center items-center gap-4">
 					<button
 						onClick={() => navigate("/user")}
 						className="flex justify-items-center items-center gap-1 text-lg hover:underline"
 					>
-						<FaUserCircle /> {user.fullname}
+						<FaUserCircle /> {userInfo.firstName}
 					</button>
 					<button
 						onClick={logoutUser}
@@ -38,13 +46,6 @@ export default function Header() {
 						<PiSignOutBold /> Sign out
 					</button>
 				</div>
-			) : (
-				<button
-					onClick={() => navigate("/login")}
-					className="flex justify-items-center items-center gap-1 text-lg hover:underline"
-				>
-					<FaUserCircle /> Sign in
-				</button>
 			)}
 		</header>
 	);
