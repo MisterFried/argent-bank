@@ -18,7 +18,6 @@ export default function Login() {
 		register,
 		handleSubmit,
 		formState: { errors },
-		// reset,
 	} = useForm();
 
 	// Login the user and retrieve a JWT token
