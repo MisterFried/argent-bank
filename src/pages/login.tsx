@@ -10,10 +10,17 @@ import { retrieveUserInfo } from "../lib/retrieveUserInfo";
 import { updateUserInfo } from "../state/userInfo";
 
 export default function Login() {
+	// Global states
 	const userTokenState = useSelector((state: RootState) => state.userToken);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+
+	// Local states
 	const [errorState, setErrorState] = useState<string | undefined>(undefined);
+
+	// Navigation
+	const navigate = useNavigate();
+
+	//Form handling
 	const {
 		register,
 		handleSubmit,
@@ -26,8 +33,10 @@ export default function Login() {
 		if (error) {
 			setErrorState(error);
 		}
+		// Token successfully retrieved
 		if (token != "") {
 			dispatch(updateToken(token));
+			// Fetch user infos corresponding the the token
 			const retrievedUserInfo = await retrieveUserInfo(token);
 			if (retrievedUserInfo) {
 				dispatch(updateUserInfo(retrievedUserInfo));
@@ -36,7 +45,7 @@ export default function Login() {
 		}
 	}
 
-	// Redirect the user to its page if already connected
+	// Redirect the user to the user page if already connected
 	useEffect(() => {
 		if (userTokenState.token != "") {
 			navigate("/user");

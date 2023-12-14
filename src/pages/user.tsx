@@ -3,16 +3,24 @@ import { RootState } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import updateUser from "../lib/updateUser";
+import updateUserInDB from "../lib/updateUserInDB";
 import { retrieveUserInfo } from "../lib/retrieveUserInfo";
 import { updateUserInfo } from "../state/userInfo";
 
 export default function User() {
+	// Global states
 	const tokenState = useSelector((state: RootState) => state.userToken);
 	const userInfo = useSelector((state: RootState) => state.userInfo);
 	const dispatch = useDispatch();
+
+	// Local states
 	const [editUser, setEditUser] = useState(false);
+	const [error, setError] = useState(false);
+
+	// Navigation
 	const navigate = useNavigate();
+
+	// Form handling
 	const {
 		register,
 		handleSubmit,
@@ -20,30 +28,40 @@ export default function User() {
 		reset,
 	} = useForm();
 
-	// redirect the user if he's not logged in
+	// Toggle user first/last name input display
+	function toogleEdit() {
+		setEditUser(!editUser);
+	}
+
+	// Handle user first/last name changes
+	async function onSubmit(data: FieldValues) {
+		// Update names in the database
+		const success = await updateUserInDB(data.firstName, data.lastName, tokenState.token);
+		if (success) {
+			setError(false);
+			// Fetch the new user infos from the database
+			const updatedUserInfo = await retrieveUserInfo(tokenState.token);
+			if (updatedUserInfo) {
+				// Update the user infos in the global state
+				dispatch(updateUserInfo(updatedUserInfo));
+			}
+			reset();
+			setEditUser(false);
+		} else {
+			setError(true);
+		}
+	}
+
+	// Redirect the user if he's not logged in
 	useEffect(() => {
 		if (tokenState.token === "") {
 			navigate("/login");
 		}
 	}, []);
 
-	function toogleEdit() {
-		setEditUser(!editUser);
-	}
-
-	async function onSubmit(data: FieldValues) {
-		updateUser(data.firstName, data.lastName, tokenState.token);
-		const updatedUserInfo = await retrieveUserInfo(tokenState.token);
-		if (updatedUserInfo) {
-			dispatch(updateUserInfo(updatedUserInfo));
-		}
-		reset();
-		setEditUser(false);
-	}
-
 	if (tokenState.token != "") {
 		return (
-			<main className="grow flex flex-col items-center gap-6 py-6 px-24 bg-[#12002b]">
+			<main className="grow flex flex-col items-center gap-6 py-6 px-12 sm:px-24 bg-[#12002b]">
 				<h1 className="text-4xl text-white text-center">
 					Welcome back {userInfo.firstName + " " + userInfo.lastName} !
 				</h1>
@@ -72,6 +90,11 @@ export default function User() {
 									<span className="text-red-400">Please enter your new last name</span>
 								)}
 							</label>
+							{error && (
+								<span className="text-center col-span-2 text-red-400">
+									An error has occured ! Names weren't updated
+								</span>
+							)}
 							<button className="p-2 w-24 justify-self-end bg-primary-400 text-white hover:bg-primary-600 transition-all">
 								Save
 							</button>

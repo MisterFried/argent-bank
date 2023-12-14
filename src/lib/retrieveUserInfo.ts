@@ -14,13 +14,16 @@ export async function retrieveUserInfo(token: string) {
 	try {
 		const response = await fetch(url, requestOptions);
 
+		// Successfully retrieved user infos
 		if (response.ok) {
 			const responseJSON = await response.json();
 			return responseJSON.body as UserInfo;
 		} else {
+			// Error from backend
 			console.log("An error has occured");
 		}
 	} catch (error) {
+		// Unknown error
 		console.log(error);
 	}
 }

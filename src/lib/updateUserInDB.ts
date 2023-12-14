@@ -1,4 +1,4 @@
-export default async function updateUser(firstName: string, lastName: string, token: string) {
+export default async function updateUserInDB(firstName: string, lastName: string, token: string) {
 	const url = "http://localhost:3001/api/v1/user/profile";
 
 	const updatedUser = {
@@ -18,12 +18,15 @@ export default async function updateUser(firstName: string, lastName: string, to
 	try {
 		const response = await fetch(url, requestOptions);
 
+		// Successfully updated user first/last names
 		if (response.ok) {
 			return true;
 		} else {
+			// Error from backend
 			console.log("An error has occured");
 		}
 	} catch (error) {
+		// Unknown error
 		console.log(error);
 	}
 }

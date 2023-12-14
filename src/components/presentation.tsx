@@ -30,8 +30,7 @@ export default function Presentation() {
 				/>
 				<h2 className="font-bold text-2xl text-black text-center">Security you can trust</h2>
 				<p className="text-center">
-					{" "}
-					We use top of the line encryption to make sure your data and money is always safe.{" "}
+					We use top of the line encryption to make sure your data and money is always safe.
 				</p>
 			</article>
 		</section>

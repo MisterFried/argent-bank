@@ -16,6 +16,7 @@ export default async function loginUser(email: string, password: string) {
 		body: JSON.stringify(userCredentials),
 	};
 
+	// returns the token or an error
 	const returnValue: returnType = {
 		token: "",
 		error: undefined,
@@ -24,10 +25,12 @@ export default async function loginUser(email: string, password: string) {
 	try {
 		const response = await fetch(url, requestOptions);
 
+		// Token successfully retrieved
 		if (response.ok) {
 			const responseJSON = await response.json();
 			returnValue.token = responseJSON.body.token;
 		} else {
+			// Known errors from the backend
 			switch (response.status) {
 				case 400:
 					returnValue.error = "User credentials are incorrect";
@@ -42,7 +45,9 @@ export default async function loginUser(email: string, password: string) {
 		}
 		return returnValue;
 	} catch (error) {
+		// Unknown error
 		returnValue.error = "An error has occured";
+		console.log(error);
 		return returnValue;
 	}
 }

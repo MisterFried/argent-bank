@@ -22,8 +22,16 @@ const userSlice = createSlice({
 			state.createdAt = actions.payload.createdAt;
 			state.updatedAt = actions.payload.updatedAt;
 		},
+		deleteUserInfo: state => {
+			state.firstName = "";
+			state.lastName = "";
+			state.email = "";
+			state.id = "";
+			state.createdAt = "";
+			state.updatedAt = "";
+		},
 	},
 });
 
 export default userSlice.reducer;
-export const { updateUserInfo } = userSlice.actions;
+export const { updateUserInfo, deleteUserInfo } = userSlice.actions;
