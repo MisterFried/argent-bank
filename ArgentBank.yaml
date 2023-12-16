@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: ArgentBank
+  description: As part of the transaction-oriented phase 2 of the project, we took a close look at the requirements and specifications for back-end API development. This Swagger document provides detailed modeling of endpoints, HTTP methods, routes, parameters and responses to effectively meet the specific functional needs of the application.
+  version: 1.0.0
+servers:
+  - url: localhost:3001
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+paths:
+  /user/operations:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: Get monthly operations
+      description: Retrieve the list of the user's operations for the current month
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID of the operation
+                        type:
+                          type: string
+                          description: Type of the operation
+                        amount:
+                          type: number
+                          description: Amount of the operation
+                        date:
+                          type: string
+                          format: date
+                          description: Date of the operation
+                        receiver:
+                          type: string
+                          description: Receiver of the operation
+                        sender:
+                          type: string
+                          description: Sender of the operation
+                        category:
+                          type: string
+                          description: Category of the operation
+        '400':
+          description: Invalid fields
+        '500':
+          description: Internal server error
+  /user/operation/{operationId}:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: Get detailed information for a specific operation
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: operationId
+          description: ID of the operation
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: ID of the operation
+                      type:
+                        type: string
+                        description: Type of the operation
+                      amount:
+                        type: number
+                        description: Amount of the operation
+                      date:
+                        type: string
+                        format: date
+                        description: Date of the operation
+                      receiver:
+                        type: string
+                        description: Receiver of the operation
+                      sender:
+                        type: string
+                        description: Sender of the operation
+                      category:
+                        type: string
+                        description: Category of the operation
+                      note:
+                        type: string
+                        description: Custom note about the operation from the user
+                      include:
+                        type: boolean
+                        description: Indicates if the operation should be included in this month's budget recap
+        '400':
+          description: Invalid fields
+        '500':
+          description: Internal server error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: Update data for a specific operation
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: operationId
+          description: ID of the operation
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                      category:
+                        type: string
+                        description: Category of the operation
+                      note:
+                        type: string
+                        description: Custom note about the operation from the user
+                      include:
+                        type: boolean
+                        description: Indicates if the operation should be included in this month's budget recap
+      responses:
+        '200':
+          description: Successful update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category:
+                    type: string
+                    description: Updated category of the operation
+                  note:
+                    type: string
+                    description: Updated note about the operation
+                  include:
+                    type: boolean
+                    description: Updated value of the include property
+                  id:
+                    type: string
+                    description: ID of the operation
+        '400':
+          description: Invalid fields
+        '500':
+          description: Internal server error
