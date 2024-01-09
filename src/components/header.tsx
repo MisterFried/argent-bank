@@ -40,7 +40,7 @@ export default function Header() {
 			) : (
 				<div className="flex justify-items-center items-center gap-4">
 					<button
-						onClick={() => navigate("/user")}
+						onClick={() => navigate("/profile")}
 						className="flex justify-items-center items-center gap-1 text-lg hover:underline"
 					>
 						<FaUserCircle /> {userInfo.firstName}

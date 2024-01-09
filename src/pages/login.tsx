@@ -16,9 +16,13 @@ export default function Login() {
 
 	// Local states
 	const [errorState, setErrorState] = useState<string | undefined>(undefined);
+	const [fetchingError, setFetchingError] = useState(false);
 
 	// Navigation
 	const navigate = useNavigate();
+
+	// Email validation regex
+	const validationPattern = /^[a-z,A-Z,0-9]+([-,.,_]?[a-z,A-Z,0-9]+)*@{1}[a-z,A-Z]{2,}\.{1}[a-z,A-Z]{2,}$/;
 
 	//Form handling
 	const {
@@ -34,21 +38,24 @@ export default function Login() {
 			setErrorState(error);
 		}
 		// Token successfully retrieved
-		if (token != "") {
+		if (token !== "") {
+			setFetchingError(false);
 			dispatch(updateToken(token));
 			// Fetch user infos corresponding the the token
 			const retrievedUserInfo = await retrieveUserInfo(token);
 			if (retrievedUserInfo) {
 				dispatch(updateUserInfo(retrievedUserInfo));
+				navigate("/profile");
+			} else {
+				setFetchingError(true);
 			}
-			navigate("/user");
 		}
 	}
 
 	// Redirect the user to the user page if already connected
 	useEffect(() => {
-		if (userTokenState.token != "") {
-			navigate("/user");
+		if (userTokenState.token !== "") {
+			navigate("/profile");
 		}
 	}, []);
 
@@ -65,10 +72,13 @@ export default function Login() {
 								className="w-38 border-gray-400 border text-xl"
 								type="text"
 								id="email"
-								{...register("email", { required: true })}
+								{...register("email", { required: true, pattern: validationPattern })}
 							/>
 							{errors["email"]?.type === "required" && (
 								<span className="text-red-400">Please enter your email</span>
+							)}
+							{errors["email"]?.type === "pattern" && (
+								<span className="text-red-400">Please enter a correct email</span>
 							)}
 						</p>
 						<p className="flex flex-col">
@@ -88,6 +98,9 @@ export default function Login() {
 							<label htmlFor="rememberMe">Remember me</label>
 						</p>
 						{errorState && <span className="text-red-400">{errorState}</span>}
+						{fetchingError && (
+							<span className="text-red-400">Une erreur est survenue, merci de réessayer</span>
+						)}
 						<button className="w-full p-2 bg-primary-400 text-white text-xl font-semibold hover:underline hover:bg-primary-600 transition-all">
 							Sign In
 						</button>

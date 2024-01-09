@@ -4,7 +4,7 @@ import Home from "./pages/home.tsx";
 import Header from "./components/header.tsx";
 import Footer from "./components/footer.tsx";
 import Login from "./pages/login.tsx";
-import User from "./pages/user.tsx";
+import Profile from "./pages/profile.tsx";
 import { store } from "./state/store.ts";
 import { Provider } from "react-redux";
 
@@ -18,7 +18,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
-					<Route path="/user" element={<User />} />
+					<Route path="/profile" element={<Profile />} />
 				</Routes>
 				<Footer />
 			</BrowserRouter>

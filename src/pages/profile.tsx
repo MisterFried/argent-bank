@@ -7,7 +7,7 @@ import updateUserInDB from "../lib/updateUserInDB";
 import { retrieveUserInfo } from "../lib/retrieveUserInfo";
 import { updateUserInfo } from "../state/userInfo";
 
-export default function User() {
+export default function Profile() {
 	// Global states
 	const tokenState = useSelector((state: RootState) => state.userToken);
 	const userInfo = useSelector((state: RootState) => state.userInfo);
@@ -16,6 +16,7 @@ export default function User() {
 	// Local states
 	const [editUser, setEditUser] = useState(false);
 	const [error, setError] = useState(false);
+	const [fetchingError, setFetchingError] = useState(false);
 
 	// Navigation
 	const navigate = useNavigate();
@@ -39,16 +40,20 @@ export default function User() {
 		const success = await updateUserInDB(data.firstName, data.lastName, tokenState.token);
 		if (success) {
 			setError(false);
+			setFetchingError(false);
 			// Fetch the new user infos from the database
 			const updatedUserInfo = await retrieveUserInfo(tokenState.token);
 			if (updatedUserInfo) {
 				// Update the user infos in the global state
 				dispatch(updateUserInfo(updatedUserInfo));
+			} else {
+				setFetchingError(true);
 			}
 			reset();
 			setEditUser(false);
 		} else {
 			setError(true);
+			setFetchingError(false);
 		}
 	}
 
@@ -113,6 +118,11 @@ export default function User() {
 					>
 						Edit Name
 					</button>
+				)}
+				{fetchingError && (
+					<span className="text-center col-span-2 text-red-400">
+						An error has occured ! Please refresh the page to get the updated names
+					</span>
 				)}
 				<section className="flex flex-col gap-8 w-full max-w-[128rem]">
 					<article className="relative flex flex-col p-4 bg-white">
