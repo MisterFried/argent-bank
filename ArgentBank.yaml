@@ -12,7 +12,7 @@ components:
       scheme: bearer
 paths:
   /user/operations:
-    post:
+    get:
       security:
         - Bearer: []
       tags:
@@ -66,7 +66,7 @@ paths:
         '500':
           description: Internal server error
   /user/operation/{operationId}:
-    post:
+    get:
       security:
         - Bearer: []
       tags:
