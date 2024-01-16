@@ -62,7 +62,9 @@ paths:
                           type: string
                           description: Category of the operation
         '400':
-          description: Invalid fields
+          description: Bad Request
+        '401':
+          description: Unauthorized (incorrect JWT token)
         '500':
           description: Internal server error
   /user/operation/{operationId}:
@@ -125,7 +127,13 @@ paths:
                         type: boolean
                         description: Indicates if the operation should be included in this month's budget recap
         '400':
-          description: Invalid fields
+          description: Bad Request
+        '401':
+          description: Unauthorized (incorrect JWT token)
+        '403':
+          description: Forbidden (correct JWT token but operation ID corresponds to another user)
+        '404':
+          description: Not Found (correct JWT token but operation do not exist)
         '500':
           description: Internal server error
     put:
@@ -183,6 +191,12 @@ paths:
                     type: string
                     description: ID of the operation
         '400':
-          description: Invalid fields
+          description: "Bad request (ex: invalid request body)"
+        '401':
+          description: Unauthorized (incorrect JWT token)
+        '403':
+          description: Forbidden (correct JWT token but operation ID corresponds to another user)
+        '404':
+          description: Not Found (correct JWT token but operation do not exist)
         '500':
           description: Internal server error
